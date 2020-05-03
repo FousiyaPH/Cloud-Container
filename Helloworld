@@ -1,3 +1,2 @@
-
-Hii
-this is for testing
+$strString = "Hello World"
+write-host $strString
