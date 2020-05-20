@@ -1,2 +1,2 @@
-$strString = "Hello World new"
+$strString = "Hello World test"
 write-host $strString
