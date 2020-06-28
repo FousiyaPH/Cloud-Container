@@ -1,2 +1,0 @@
-$strString = "Hello World test"
-write-host $strString
