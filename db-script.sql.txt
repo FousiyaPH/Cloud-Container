@@ -1,0 +1,129 @@
+DROP TABLE IF EXISTS Subject;
+DROP TABLE IF EXISTS Staff;
+DROP TABLE IF EXISTS Student;
+DROP TABLE IF EXISTS Batch;
+DROP TABLE IF EXISTS Course;
+DROP TABLE IF EXISTS Department
+DROP TABLE IF EXISTS CmsConfig;
+DROP TABLE IF EXISTS CollegeEvents;
+DROP TABLE IF EXISTS Complaint;
+DROP TABLE IF EXISTS Fee;
+DROP TABLE IF EXISTS LibraryMembership;
+DROP TABLE IF EXISTS LibraryBookReturn;
+DROP TABLE IF EXISTS LibraryBookRenew;
+DROP TABLE IF EXISTS LibraryBookIssue;
+DROP TABLE IF EXISTS LibraryBook;
+DROP TABLE IF EXISTS News;
+
+
+CREATE TABLE Department (Id INTEGER PRIMARY KEY
+, DepartmentName VARCHAR(50) UNIQUE NOT NULL
+, CreatedBy INTEGER
+, CreatedDate DATETIME
+, ModifiedBy INTEGER
+, ModifiedDate DATETIME);
+
+CREATE TABLE Course (Id INTEGER PRIMARY KEY
+, CourseName varchar(50) UNIQUE NOT NULL
+, DepartmentId INTEGER CONSTRAINT Fk_Department REFERENCES Department (Id) NOT NULL
+, CourseDuration varchar(50) NOT NULL, CreatedBy INTEGER, CreatedDate DATETIME
+, ModifiedBy INTEGER, ModifiedDate DATETIME);
+
+CREATE TABLE Batch (Id INTEGER PRIMARY KEY
+, YearFrom INTEGER NOT NULL
+, YearTo INTEGER NOT NULL
+, CourseId INTEGER REFERENCES Course (Id)
+, BatchName varchar(50) NOT NULL
+, CreatedBy INT, CreatedDate DATETIME
+, ModifiedBy INTEGER, ModifiedDate DATETIME, IsActive BIT);
+
+CREATE TABLE CmsConfig (Id INTEGER PRIMARY KEY
+, "Key" varchar(50), Value varchar(50)
+, CreatedBy INTEGER
+, CreatedDate DATETIME DEFAULT (getdate())
+, ModifiedBy INTEGER, ModifiedDate DATETIME DEFAULT (getdate()));
+
+CREATE TABLE CollegeEvents (Id INTEGER PRIMARY KEY
+, EventName varchar(50) NOT NULL, EventStarts DATETIME NOT NULL
+, EventEnds DATETIME NOT NULL, ShortDescription varchar(50) NOT NULL , EventDetails varchar(MAX)
+, CreatedBy INTEGER, CreatedDate DATETIME DEFAULT (getdate()), ModifiedBy INTEGER
+, ModifiedDate DATETIME DEFAULT (getdate()), EventStartsTimeHour INTEGER NOT NULL
+, EventStartsTimeMins INTEGER NOT NULL, EventStartsTimeFormat varchar(50) NOT NULL
+, EventEndsTimeHour INTEGER NOT NULL, EventEndsTimeMins INTEGER NOT NULL, EventEndsTimeFormat varchar(50) NOT NULL);
+
+CREATE TABLE Complaint (Id INTEGER PRIMARY KEY, IsStudent BIT NOT NULL
+, SubmittedBy INTEGER NOT NULL, Description varchar(MAX) NOT NULL, Status varchar(20)
+, Comments varchar(MAX), CreatedBy INTEGER, CreatedDate DATETIME, ModifiedBy INTEGER DEFAULT (0)
+, ModifiedDate DATETIME DEFAULT (getdate()), IsActive bit);
+
+CREATE TABLE Fee (Id INTEGER PRIMARY KEY, IsStudent BIT
+, CollegeId INTEGER, FineAmount INTEGER, FineDescription varchar(MAX)
+, CreatedBy INTEGER, CreatedDate DATETIME, ModifiedBy INTEGER, ModifiedDate DATETIME);
+
+
+CREATE TABLE LibraryBook (Id INTEGER PRIMARY KEY
+, Title varchar(50) NOT NULL, AuthorName varchar(50) NOT NULL
+, AreaInLibrary varchar(50) NOT NULL, Condition varchar(20) NOT NULL
+, IsAvailable BIT NOT NULL DEFAULT (1), IsActive BIT
+, CreatedBy INTEGER, CreatedDate DATETIME, ModifiedBy INTEGER DEFAULT (1)
+, ModifiedDate DATETIME DEFAULT (getdate()));
+
+CREATE TABLE LibraryBookIssue (Id INTEGER PRIMARY KEY, MemberId INTEGER
+, BookId INTEGER REFERENCES LibraryBook (Id), IssueDate DATETIME NOT NULL
+, ReturnDate DATETIME NOT NULL, IsActive BIT, CreatedBy DATETIME
+, CreatedDate DATETIME DEFAULT (getdate()), ModifiedBy DATETIME DEFAULT (0)
+, ModifiedDate DATETIME DEFAULT (getdate()));
+
+CREATE TABLE LibraryBookRenew (Id INTEGER PRIMARY KEY
+, LibraryBookIssueId INTEGER REFERENCES LibraryBookIssue (Id)
+, BookId INTEGER REFERENCES LibraryBook (Id), MemberId INTEGER
+, IsActive BIT, CreatedBy INTEGER
+, CreatedDate DATETIME DEFAULT (getdate()), ModifiedBy INTEGER DEFAULT (0)
+, ModifiedDate DATETIME DEFAULT (getdate()));
+
+
+CREATE TABLE LibraryBookReturn (Id INTEGER PRIMARY KEY
+, LibraryBookIssueId INTEGER REFERENCES LibraryBookIssue (Id)
+, BookId INTEGER REFERENCES LibraryBook (Id)
+, MemberId INTEGER, IsActive BIT
+, CreatedBy INTEGER, CreatedDate DATETIME
+, ModifiedBy INTEGER, ModifiedDate DATETIME);
+
+CREATE TABLE LibraryMembership (Id INTEGER PRIMARY KEY
+, IsStudent BIT, CollegeId INTEGER, IsActive BIT
+, NoOfBooksTaken INTEGER DEFAULT (0), CreatedBy INTEGER
+, CreatedDate DATETIME, ModifiedBy INTEGER, ModifiedDate DATETIME);
+
+
+CREATE TABLE News (Id INTEGER PRIMARY KEY
+, NewsHeader VARCHAR(50) NOT NULL, Content VARCHAR(MAX) NOT NULL
+, CreatedBy INTEGER, CreatedDate DATETIME, ModifiedBy INTEGER
+, ModifiedDate DATETIME, IsActive BIT);
+
+CREATE TABLE Staff (Id INTEGER PRIMARY KEY
+, StaffName varchar(50) NOT NULL, Qualification varchar(50) NOT NULL
+, DepartmentId INTEGER NOT NULL, DateOfJoining DATETIME NOT NULL
+, EmergencyContactNumber INTEGER NOT NULL
+, EmergencyContactPerson varchar(50) NOT NULL, SalaryPerMonth INTEGER NOT NULL
+, Address varchar(250) NOT NULL, Gender CHAR NOT NULL, EmailAddress varchar(100) NOT NULL
+, PhoneNumber INTEGER NOT NULL, DOB DATETIME NOT NULL, Username varchar(50) NOT NULL
+, Password varchar(50) NOT NULL, IsActive BIT NOT NULL DEFAULT (1)
+, CreatedBy INTEGER, CreatedDate DATETIME DEFAULT (getdate())
+, ModifiedBy INTEGER DEFAULT (0), ModifiedDate DATETIME DEFAULT (getdate()));
+
+CREATE TABLE Student (Id INTEGER PRIMARY KEY, ApplicationNumber INTEGER NOT NULL
+, StudentName varchar(50) NOT NULL, CourseId INTEGER REFERENCES Course (Id)
+, BatchId INTEGER REFERENCES Batch (Id), Qualification varchar(50) NOT NULL
+, FatherName varchar(50) NOT NULL, MotherName varchar(50) NOT NULL, ParentEmailAddress varchar(50) NOT NULL
+, ParentPhoneNumber INTEGER NOT NULL, Address varchar(250) NOT NULL, Gender CHAR NOT NULL
+, StudentEmailAddress varchar(50) NOT NULL, StudentPhoneNumber INTEGER NOT NULL
+, DateofBirth DATETIME NOT NULL, UserName varchar(50) UNIQUE, Password varchar(50)
+, CreatedBy INTEGER, CreatedDate DATETIME, ModifiedBy INTEGER, ModifiedDate DATETIME
+, IsActive BIT DEFAULT (1));
+
+CREATE TABLE Subject (Id INTEGER PRIMARY KEY
+, SubjectCode varchar(50) NOT NULL, SubjectName varchar(50) NOT NULL
+, CourseId INTEGER NOT NULL REFERENCES Course (Id)
+, BatchId INTEGER REFERENCES Batch (Id) NOT NULL
+, TotalMark INTEGER NOT NULL, PassMark INTEGER NOT NULL
+, CreatedBy INTEGER, CreatedDate DATETIME, ModifiedBy INTEGER, ModifiedDate DATETIME);
