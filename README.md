@@ -1,4 +1,4 @@
-# Cloud-Container
+# Containerized Solution
 To create an automation script to create containerized solution for a Web server; database; email; file sever
 
 Docker is one of software that support creating containerized software packages for deployment and running inside host system. Docker takes only few memories as compared with virtual machine and has high performance. The application and its dependencies will be contained inside container and that will make application more stable in different environments. Even if Host system has different version of supporting components, the application inside container can use dependencies which is already inside container and that will make more isolation for application to the outside world.
