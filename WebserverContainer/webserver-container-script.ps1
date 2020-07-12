@@ -1,4 +1,4 @@
-# A Power Shell Script To create webserver ontainer
+# A Power Shell Script To create webserver container
 # Fousiya Padinjarepeedikayil Hameed - 12/Aug/2020
 
 echo "creating web server container"
