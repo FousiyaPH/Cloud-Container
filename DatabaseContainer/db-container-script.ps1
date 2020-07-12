@@ -1,7 +1,7 @@
 # A Power Shell Script To create database container
 # Fousiya Padinjarepeedikayil Hameed - 12/Aug/2020
 
-#first user create a network so that different containers can use this network to interconnect
+#first user create a network so that different containers can use this network to interconnect. If already exist will trow warning message.
 docker network create lyit_nw
 echo "Network created"
 
