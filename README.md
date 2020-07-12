@@ -11,4 +11,4 @@ Docker container command will list all running containers in host system. In doc
 
 Using docker, user can download image from docker hub and then create container out of it. The container can be start/stop from host machine. 
 
-All the script files and read me instructions can be found inside folders.
+All the script files and readme instructions can be found inside folders.
